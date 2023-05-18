@@ -1,10 +1,10 @@
 package pl.sepka.mvvmrecipeapp.domain.mapper
 
 import pl.sepka.mvvmrecipeapp.domain.model.Recipe
-import pl.sepka.mvvmrecipeapp.network.model.RecipeResponse
+import pl.sepka.mvvmrecipeapp.network.model.RecipeDTO
 import java.util.*
 
-fun RecipeResponse.toDomain() = Recipe(
+fun RecipeDTO.toDomain() = Recipe(
     id = this.pk,
     title = this.title.orEmpty(),
     publisher = this.publisher.orEmpty(),

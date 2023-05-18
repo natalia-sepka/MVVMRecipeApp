@@ -1,13 +1,13 @@
 package pl.sepka.mvvmrecipeapp.network.model.response
 
 import com.google.gson.annotations.SerializedName
-import pl.sepka.mvvmrecipeapp.network.model.RecipeResponse
+import pl.sepka.mvvmrecipeapp.network.model.RecipeDTO
 
-class RecipeSearchResponse(
+data class RecipeSearchDTO(
 
     @SerializedName("count")
     var count: Int,
 
     @SerializedName("results")
-    var recipes: List<RecipeResponse>
+    var recipes: List<RecipeDTO>
 )

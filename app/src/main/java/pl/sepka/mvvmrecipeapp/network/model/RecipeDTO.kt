@@ -2,7 +2,7 @@ package pl.sepka.mvvmrecipeapp.network.model
 
 import com.google.gson.annotations.SerializedName
 
-class RecipeResponse(
+data class RecipeDTO(
 
     @SerializedName("pk")
     var pk: Int? = null,
