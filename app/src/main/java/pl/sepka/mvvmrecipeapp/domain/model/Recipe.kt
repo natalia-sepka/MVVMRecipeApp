@@ -2,6 +2,7 @@ package pl.sepka.mvvmrecipeapp.domain.model
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
+import java.util.*
 
 @Parcelize
 data class Recipe(
@@ -14,6 +15,6 @@ data class Recipe(
     val description: String? = null,
     val cookingInstructions: String? = null,
     val ingredients: List<String> = listOf(),
-    val dateAdded: String? = null,
-    val dateUpdated: String? = null
+    val dateAdded: Date? = null,
+    val dateUpdated: Date? = null
 ) : Parcelable

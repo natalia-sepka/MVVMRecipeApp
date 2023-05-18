@@ -2,7 +2,7 @@ package pl.sepka.mvvmrecipeapp.network.model
 
 import com.google.gson.annotations.SerializedName
 
-class RecipeNetworkEntity(
+class RecipeResponse(
 
     @SerializedName("pk")
     var pk: Int? = null,
@@ -15,6 +15,9 @@ class RecipeNetworkEntity(
 
     @SerializedName("publisher")
     var publisher: String? = null,
+
+    @SerializedName("featured_image")
+    val featuredImage: String?,
 
     @SerializedName("source_url")
     var sourceUrl: String? = null,
