@@ -1,23 +1,21 @@
-package pl.sepka.mvvmrecipeapp
+package pl.sepka.mvvmrecipeapp.presentation.ui.recipe
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController
+import dagger.hilt.android.AndroidEntryPoint
 
-class RecipeListFragment : Fragment() {
-
+@AndroidEntryPoint
+class RecipeFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -25,23 +23,15 @@ class RecipeListFragment : Fragment() {
     ): View {
         return ComposeView(requireContext()).apply {
             setContent {
-                RecipeScreen()
+                RecipeFragmentScreen()
             }
         }
     }
 
     @Composable
-    fun RecipeScreen() {
+    fun RecipeFragmentScreen() {
         Column(modifier = Modifier.padding(26.dp)) {
-            Text(text = "Recipe List")
-            Spacer(modifier = Modifier.padding(10.dp))
-            Button(
-                onClick = {
-                    findNavController().navigate(R.id.viewRecipe)
-                }
-            ) {
-                Text(text = "TO RECIPE FRAGMENT")
-            }
+            Text(text = "RECIPE FRAGMENT")
         }
     }
 }

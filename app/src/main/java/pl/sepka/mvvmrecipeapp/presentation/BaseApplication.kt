@@ -1,4 +1,4 @@
-package pl.sepka.mvvmrecipeapp
+package pl.sepka.mvvmrecipeapp.presentation
 
 import android.app.Application
 import dagger.hilt.android.HiltAndroidApp

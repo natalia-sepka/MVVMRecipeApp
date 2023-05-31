@@ -52,9 +52,9 @@ dependencies {
     def constraint_layout = "2.0.4"
     implementation "androidx.constraintlayout:constraintlayout:$constraint_layout"
 
-    implementation 'androidx.core:core-ktx:1.10.0'
+    implementation 'androidx.core:core-ktx:1.10.1'
     implementation 'androidx.appcompat:appcompat:1.6.1'
-    implementation 'com.google.android.material:material:1.8.0'
+    implementation 'com.google.android.material:material:1.9.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
@@ -67,7 +67,7 @@ dependencies {
     debugImplementation "androidx.compose.ui:ui-tooling:$compose_version"
     debugImplementation "androidx.compose.ui:ui-test-manifest:$compose_version"
 
-    def nav_version = "2.3.2"
+    def nav_version = "2.5.3"
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
     implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
 
@@ -79,7 +79,17 @@ dependencies {
     implementation "com.google.dagger:hilt-android:$hilt_version"
     kapt "com.google.dagger:hilt-compiler:$hilt_version"
 
-    implementation "androidx.activity:activity-compose:1.8.0-alpha03"
+
+    def hilt_lifecycle = "1.0.0"
+    implementation "androidx.hilt:hilt-work:$hilt_lifecycle"
+    kapt "androidx.hilt:hilt-compiler:$hilt_lifecycle"
+
+    def work_runtime = "2.8.1"
+    implementation "androidx.work:work-runtime-ktx:$work_runtime"
+
+    implementation "androidx.activity:activity-compose:1.8.0-alpha04"
+
+    implementation "androidx.fragment:fragment-ktx:1.5.7"
 }
 
 kapt {

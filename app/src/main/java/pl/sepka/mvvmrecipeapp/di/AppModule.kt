@@ -6,7 +6,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import pl.sepka.mvvmrecipeapp.BaseApplication
+import pl.sepka.mvvmrecipeapp.presentation.BaseApplication
 import javax.inject.Singleton
 
 @Module
@@ -19,9 +19,6 @@ object AppModule {
         return app as BaseApplication
     }
 
-    // fun someRandomString(): String {
-    //    return "some random string"
-    // }
     @Singleton
     @Provides
     fun someRandomString() = "some random string xdxdxdx"

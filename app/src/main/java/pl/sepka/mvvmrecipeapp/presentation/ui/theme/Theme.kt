@@ -1,4 +1,4 @@
-package pl.sepka.mvvmrecipeapp.ui.theme
+package pl.sepka.mvvmrecipeapp.presentation.ui.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.MaterialTheme
