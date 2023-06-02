@@ -17,6 +17,11 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        vectorDrawables {
+            useSupportLibrary true
+        }
+        buildConfigField "String", 'SERVER_URL', '"https://food2fork.ca/api/recipe/"'
+        buildConfigField "String", 'TOKEN', '"Token 9c8b06d329136da358c2d00e76946b0111ce2c48"'
     }
 
     buildTypes {
@@ -74,6 +79,8 @@ dependencies {
     def retrofit_version = "2.9.0"
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
     implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
+
+    implementation "com.squareup.retrofit2:converter-gson:2.3.0"
 
     def hilt_version = "2.44"
     implementation "com.google.dagger:hilt-android:$hilt_version"
