@@ -5,6 +5,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import pl.sepka.mvvmrecipeapp.BuildConfig
 import pl.sepka.mvvmrecipeapp.network.RecipeService
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -18,8 +19,7 @@ object NetworkModule {
     @Provides
     fun provideRecipeService(): RecipeService {
         return Retrofit.Builder()
-            // .baseUrl(BuildConfig.SERVER_URL)
-            .baseUrl("https://food2fork.ca/api/recipe/")
+            .baseUrl(BuildConfig.SERVER_URL)
             .addConverterFactory(GsonConverterFactory.create(GsonBuilder().create()))
             .build()
             .create(RecipeService::class.java)
