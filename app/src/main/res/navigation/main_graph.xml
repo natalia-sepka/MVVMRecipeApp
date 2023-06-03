@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/recipeListFragment"
-        android:name="pl.sepka.mvvmrecipeapp.presentation.ui.recipe_list.RecipeListFragment"
+        android:name="pl.sepka.mvvmrecipeapp.presentation.ui.recipeList.RecipeListFragment"
         android:label="RecipeListFragment" >
         <action
             android:id="@+id/viewRecipe"

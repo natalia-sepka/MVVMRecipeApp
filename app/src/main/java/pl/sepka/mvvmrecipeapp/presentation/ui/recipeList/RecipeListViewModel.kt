@@ -1,4 +1,4 @@
-package pl.sepka.mvvmrecipeapp.presentation.ui.recipe_list
+package pl.sepka.mvvmrecipeapp.presentation.ui.recipeList
 
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
@@ -21,6 +21,10 @@ constructor(
     val recipes: MutableState<List<Recipe>> = mutableStateOf(listOf())
 
     init {
+        newSearch()
+    }
+
+    fun newSearch() {
         viewModelScope.launch {
             val result = repository.search(page = 1, query = "chicken", token = BuildConfig.TOKEN)
             recipes.value = result

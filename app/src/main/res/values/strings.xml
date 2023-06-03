@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">MVVMRecipeApp</string>
+    <string name="recipe_card_text">RecipeCard</string>
 </resources>
