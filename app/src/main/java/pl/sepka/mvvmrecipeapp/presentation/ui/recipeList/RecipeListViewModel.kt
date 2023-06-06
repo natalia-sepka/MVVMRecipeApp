@@ -31,7 +31,7 @@ constructor(
 
     fun newSearch(query: String) {
         viewModelScope.launch {
-            val result = repository.search(page = 1, query = "chicken", token = BuildConfig.TOKEN)
+            val result = repository.search(page = 1, query = query, token = BuildConfig.TOKEN)
             recipes.value = result
         }
     }
