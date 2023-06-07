@@ -5,8 +5,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -36,6 +38,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import pl.sepka.mvvmrecipeapp.R
+import pl.sepka.mvvmrecipeapp.presentation.components.CircularIndeterminateProgressBar
 import pl.sepka.mvvmrecipeapp.presentation.components.FoodCategoryChip
 import pl.sepka.mvvmrecipeapp.presentation.components.RecipeCard
 
@@ -54,6 +57,8 @@ class RecipeListFragment : Fragment() {
             setContent {
                 val recipes = viewModel.recipes.value
                 val query = viewModel.query.value
+                val selectedCategory = viewModel.selectedCategory.value
+                val loading = viewModel.loading.value
 
                 val keyboardController = LocalSoftwareKeyboardController.current
                 Column {
@@ -79,7 +84,7 @@ class RecipeListFragment : Fragment() {
                                     ),
                                     keyboardActions = KeyboardActions(
                                         onDone = {
-                                            viewModel.newSearch(query)
+                                            viewModel.newSearch()
                                             keyboardController?.hide()
                                         }
                                     ),
@@ -99,25 +104,33 @@ class RecipeListFragment : Fragment() {
                                 modifier = Modifier
                                     .horizontalScroll((rememberScrollState()))
                                     .fillMaxWidth()
+                                    .padding(start = 8.dp, bottom = 8.dp)
                             ) {
                                 for (category in getAllFoodCategories()) {
                                     FoodCategoryChip(
                                         category = category.value,
-                                        onExecuteSearch = {
-                                            viewModel.onQueryChanged(it)
-                                            viewModel.newSearch(it)
+                                        isSelected = selectedCategory == category,
+                                        onExecuteSearch =
+                                        viewModel::newSearch,
+                                        onSelectedCategoryChanged = {
+                                            viewModel.onSelectedCategoryChanged(it)
                                         }
                                     )
                                 }
                             }
                         }
                     }
-                    LazyColumn {
-                        itemsIndexed(
-                            items = recipes
-                        ) { _, recipe ->
-                            RecipeCard(recipe = recipe, onClick = {})
+                    Box(
+                        modifier = Modifier.fillMaxSize()
+                    ) {
+                        LazyColumn {
+                            itemsIndexed(
+                                items = recipes
+                            ) { _, recipe ->
+                                RecipeCard(recipe = recipe, onClick = {})
+                            }
                         }
+                        CircularIndeterminateProgressBar(isDisplayed = loading)
                     }
                 }
             }

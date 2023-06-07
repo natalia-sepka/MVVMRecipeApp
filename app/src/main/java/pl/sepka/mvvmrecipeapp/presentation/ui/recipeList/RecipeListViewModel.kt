@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import pl.sepka.mvvmrecipeapp.BuildConfig
 import pl.sepka.mvvmrecipeapp.domain.model.Recipe
@@ -21,18 +22,47 @@ constructor(
     val recipes: MutableState<List<Recipe>> = mutableStateOf(listOf())
     val query = mutableStateOf("")
 
+    val selectedCategory: MutableState<FoodCategory?> = mutableStateOf(null)
+
+    val loading = mutableStateOf(false)
+
     init {
-        newSearch(query.value)
+        newSearch()
     }
 
     fun onQueryChanged(query: String) {
         this.query.value = query
     }
 
-    fun newSearch(query: String) {
+    fun newSearch() {
         viewModelScope.launch {
-            val result = repository.search(page = 1, query = query, token = BuildConfig.TOKEN)
+            loading.value = true
+
+            resetSearchState()
+
+            delay(2000)
+
+            val result = repository.search(page = 1, query = query.value, token = BuildConfig.TOKEN)
             recipes.value = result
+
+            loading.value = false
         }
+    }
+
+    private fun resetSearchState() {
+        recipes.value = listOf()
+        if (selectedCategory.value?.value != query.value) {
+            clearSelectedCategory()
+        }
+    }
+
+    private fun clearSelectedCategory() {
+        selectedCategory.value = null
+    }
+
+    fun onSelectedCategoryChanged(category: String) {
+        val newCategory = getFoodCategory(category)
+        selectedCategory.value = newCategory
+        onQueryChanged(category)
     }
 }
