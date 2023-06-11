@@ -21,9 +21,7 @@ constructor(
 
     val recipes: MutableState<List<Recipe>> = mutableStateOf(listOf())
     val query = mutableStateOf("")
-
     val selectedCategory: MutableState<FoodCategory?> = mutableStateOf(null)
-
     val loading = mutableStateOf(false)
 
     init {
@@ -37,14 +35,10 @@ constructor(
     fun newSearch() {
         viewModelScope.launch {
             loading.value = true
-
             resetSearchState()
-
-            delay(2000)
-
+            delay(10000)
             val result = repository.search(page = 1, query = query.value, token = BuildConfig.TOKEN)
             recipes.value = result
-
             loading.value = false
         }
     }

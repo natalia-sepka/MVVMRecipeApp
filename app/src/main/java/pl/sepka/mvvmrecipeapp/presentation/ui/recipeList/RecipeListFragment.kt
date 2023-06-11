@@ -41,6 +41,7 @@ import pl.sepka.mvvmrecipeapp.R
 import pl.sepka.mvvmrecipeapp.presentation.components.CircularIndeterminateProgressBar
 import pl.sepka.mvvmrecipeapp.presentation.components.FoodCategoryChip
 import pl.sepka.mvvmrecipeapp.presentation.components.RecipeCard
+import pl.sepka.mvvmrecipeapp.presentation.components.ShimmerRecipeCardItem
 
 @AndroidEntryPoint
 class RecipeListFragment : Fragment() {
@@ -123,11 +124,19 @@ class RecipeListFragment : Fragment() {
                     Box(
                         modifier = Modifier.fillMaxSize()
                     ) {
-                        LazyColumn {
-                            itemsIndexed(
-                                items = recipes
-                            ) { _, recipe ->
-                                RecipeCard(recipe = recipe, onClick = {})
+                        if (loading) {
+                            LazyColumn {
+                                items(10) {
+                                    ShimmerRecipeCardItem(imageHeight = 250.dp)
+                                }
+                            }
+                        } else {
+                            LazyColumn {
+                                itemsIndexed(
+                                    items = recipes
+                                ) { _, recipe ->
+                                    RecipeCard(recipe = recipe, onClick = {})
+                                }
                             }
                         }
                         CircularIndeterminateProgressBar(isDisplayed = loading)
