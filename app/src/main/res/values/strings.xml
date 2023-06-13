@@ -3,4 +3,5 @@
     <string name="recipe_card_text">RecipeCard</string>
     <string name="search_label_text">Search</string>
     <string name="search_text">Text</string>
+    <string name="theme_text">Change theme</string>
 </resources>

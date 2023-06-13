@@ -100,6 +100,9 @@ dependencies {
 
     def coil = "1.3.1"
     implementation "io.coil-kt:coil-compose:$coil"
+
+    def constraint_compose = "1.0.1"
+    implementation "androidx.constraintlayout:constraintlayout-compose:$constraint_compose"
 }
 
 kapt {

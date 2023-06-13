@@ -5,7 +5,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import pl.sepka.mvvmrecipeapp.BuildConfig
 import pl.sepka.mvvmrecipeapp.domain.model.Recipe
@@ -36,7 +35,6 @@ constructor(
         viewModelScope.launch {
             loading.value = true
             resetSearchState()
-            delay(10000)
             val result = repository.search(page = 1, query = query.value, token = BuildConfig.TOKEN)
             recipes.value = result
             loading.value = false
