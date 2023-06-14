@@ -1,5 +1,6 @@
 package pl.sepka.mvvmrecipeapp.presentation.ui.recipeList
 
+import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -9,6 +10,7 @@ import kotlinx.coroutines.launch
 import pl.sepka.mvvmrecipeapp.BuildConfig
 import pl.sepka.mvvmrecipeapp.domain.model.Recipe
 import pl.sepka.mvvmrecipeapp.repository.RecipeRepository
+import pl.sepka.mvvmrecipeapp.util.TAG
 import javax.inject.Inject
 
 const val PAGE_SIZE = 30
@@ -28,38 +30,55 @@ constructor(
     private var recipeListScrollPosition = 0
 
     init {
-        newSearch()
+        onTriggerEvent(RecipeListEvent.NewSearchEvent)
+    }
+
+    fun onTriggerEvent(event: RecipeListEvent) {
+        viewModelScope.launch {
+            try {
+                when (event) {
+                    is RecipeListEvent.NewSearchEvent -> {
+                        newSearch()
+                    }
+                    is RecipeListEvent.NextPageEvent -> {
+                        nextPage()
+                    }
+                }
+            } catch (e: Exception) {
+                Log.e(
+                    TAG,
+                    "onTriggerEvent: Exception: $e," +
+                        "${e.cause}"
+                )
+            }
+        }
     }
 
     fun onQueryChanged(query: String) {
         this.query.value = query
     }
 
-    fun newSearch() {
-        viewModelScope.launch {
-            loading.value = true
-            resetSearchState()
-            val result = repository.search(page = 1, query = query.value, token = BuildConfig.TOKEN)
-            recipes.value = result
-            loading.value = false
-        }
+    private suspend fun newSearch() {
+        loading.value = true
+        resetSearchState()
+        val result = repository.search(page = 1, query = query.value, token = BuildConfig.TOKEN)
+        recipes.value = result
+        loading.value = false
     }
 
-    fun nextPage() {
-        viewModelScope.launch {
-            // prevent duplicate events due to recompose happening to quickly
-            if ((recipeListScrollPosition + 1) >= (page.value * PAGE_SIZE)) {
-                loading.value = true
-                incrementPage()
-                if (page.value > 1) {
-                    val result = repository.search(
-                        token = BuildConfig.TOKEN,
-                        page = page.value,
-                        query = query.value
-                    )
-                }
-                loading.value = false
+    private suspend fun nextPage() {
+        // prevent duplicate events due to recompose happening to quickly
+        if ((recipeListScrollPosition + 1) >= (page.value * PAGE_SIZE)) {
+            loading.value = true
+            incrementPage()
+            if (page.value > 1) {
+                val result = repository.search(
+                    token = BuildConfig.TOKEN,
+                    page = page.value,
+                    query = query.value
+                )
             }
+            loading.value = false
         }
     }
 

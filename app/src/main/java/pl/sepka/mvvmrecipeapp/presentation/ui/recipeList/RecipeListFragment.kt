@@ -98,7 +98,7 @@ class RecipeListFragment : Fragment() {
                                         ),
                                         keyboardActions = KeyboardActions(
                                             onDone = {
-                                                viewModel.newSearch()
+                                                viewModel.onTriggerEvent(RecipeListEvent.NewSearchEvent)
                                                 keyboardController?.hide()
                                             }
                                         ),
@@ -142,8 +142,9 @@ class RecipeListFragment : Fragment() {
                                         FoodCategoryChip(
                                             category = category.value,
                                             isSelected = selectedCategory == category,
-                                            onExecuteSearch =
-                                            viewModel::newSearch,
+                                            onExecuteSearch = {
+                                                viewModel.onTriggerEvent(RecipeListEvent.NewSearchEvent)
+                                            },
                                             onSelectedCategoryChanged = {
                                                 viewModel.onSelectedCategoryChanged(it)
                                             }
@@ -170,7 +171,7 @@ class RecipeListFragment : Fragment() {
                                     ) { index, recipe ->
                                         viewModel.onChangeRecipeScrollPosition(index)
                                         if ((index + 1) >= (page * PAGE_SIZE) && !loading) {
-                                            viewModel.nextPage()
+                                            viewModel.onTriggerEvent(RecipeListEvent.NextPageEvent)
                                         }
                                         RecipeCard(recipe = recipe, onClick = {})
                                     }
