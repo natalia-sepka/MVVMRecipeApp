@@ -11,6 +11,8 @@ import pl.sepka.mvvmrecipeapp.domain.model.Recipe
 import pl.sepka.mvvmrecipeapp.repository.RecipeRepository
 import javax.inject.Inject
 
+const val PAGE_SIZE = 30
+
 @HiltViewModel
 class RecipeListViewModel
 @Inject
@@ -22,6 +24,8 @@ constructor(
     val query = mutableStateOf("")
     val selectedCategory: MutableState<FoodCategory?> = mutableStateOf(null)
     val loading = mutableStateOf(false)
+    val page = mutableStateOf(1)
+    private var recipeListScrollPosition = 0
 
     init {
         newSearch()
@@ -41,8 +45,44 @@ constructor(
         }
     }
 
+    fun nextPage() {
+        viewModelScope.launch {
+            // prevent duplicate events due to recompose happening to quickly
+            if ((recipeListScrollPosition + 1) >= (page.value * PAGE_SIZE)) {
+                loading.value = true
+                incrementPage()
+                if (page.value > 1) {
+                    val result = repository.search(
+                        token = BuildConfig.TOKEN,
+                        page = page.value,
+                        query = query.value
+                    )
+                }
+                loading.value = false
+            }
+        }
+    }
+
+    /**
+     * Append new recipes to the current list of recipes
+     */
+    private fun appendRecipes(recipe: List<Recipe>) {
+        val current = ArrayList(this.recipes.value)
+        this.recipes.value = current
+    }
+
+    private fun incrementPage() {
+        page.value = page.value + 1
+    }
+
+    fun onChangeRecipeScrollPosition(position: Int) {
+        recipeListScrollPosition = position
+    }
+
     private fun resetSearchState() {
         recipes.value = listOf()
+        page.value = 1
+        onChangeRecipeScrollPosition(0)
         if (selectedCategory.value?.value != query.value) {
             clearSelectedCategory()
         }
