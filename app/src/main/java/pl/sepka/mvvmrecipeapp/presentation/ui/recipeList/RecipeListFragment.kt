@@ -4,16 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -41,17 +36,16 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import pl.sepka.mvvmrecipeapp.R
 import pl.sepka.mvvmrecipeapp.presentation.BaseApplication
-import pl.sepka.mvvmrecipeapp.presentation.components.CircularIndeterminateProgressBar
 import pl.sepka.mvvmrecipeapp.presentation.components.FoodCategoryChip
-import pl.sepka.mvvmrecipeapp.presentation.components.RecipeCard
-import pl.sepka.mvvmrecipeapp.presentation.components.ShimmerRecipeCardItem
+import pl.sepka.mvvmrecipeapp.presentation.components.RecipeList
 import pl.sepka.mvvmrecipeapp.presentation.ui.theme.AppTheme
 import javax.inject.Inject
 
-private const val SHIMMERING_RECIPE_LIST_SIZE = 10
+const val SHIMMERING_RECIPE_LIST_SIZE = 10
 
 @AndroidEntryPoint
 class RecipeListFragment : Fragment() {
@@ -154,32 +148,16 @@ class RecipeListFragment : Fragment() {
                                 }
                             }
                         }
-                        Box(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .background(color = MaterialTheme.colors.background)
-                        ) {
-                            if (loading && recipes.isEmpty()) {
-                                LazyColumn {
-                                    items(SHIMMERING_RECIPE_LIST_SIZE) {
-                                        ShimmerRecipeCardItem(imageHeight = 250.dp)
-                                    }
-                                }
-                            } else {
-                                LazyColumn {
-                                    itemsIndexed(
-                                        items = recipes
-                                    ) { index, recipe ->
-                                        viewModel.onChangeRecipeScrollPosition(index)
-                                        if ((index + 1) >= (page * PAGE_SIZE) && !loading) {
-                                            viewModel.onTriggerEvent(RecipeListEvent.NextPageEvent)
-                                        }
-                                        RecipeCard(recipe = recipe, onClick = {})
-                                    }
-                                }
-                            }
-                            CircularIndeterminateProgressBar(isDisplayed = loading)
-                        }
+                        RecipeList(
+                            loading = loading,
+                            recipes = recipes,
+                            onChangeRecipeScrollPosition = viewModel::onChangeRecipeScrollPosition,
+                            page = page,
+                            onNextPage = {
+                                viewModel.onTriggerEvent(RecipeListEvent.NextPageEvent)
+                            },
+                            navController = findNavController()
+                        )
                     }
                 }
             }

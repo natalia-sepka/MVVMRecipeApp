@@ -9,7 +9,7 @@
         android:name="pl.sepka.mvvmrecipeapp.presentation.ui.recipeList.RecipeListFragment"
         android:label="RecipeListFragment" >
         <action
-            android:id="@+id/viewRecipe"
+            android:id="@+id/action_recipeListFragment_to_recipeFragment"
             app:destination="@id/recipeFragment" />
     </fragment>
     <fragment
