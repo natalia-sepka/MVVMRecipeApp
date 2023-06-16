@@ -34,6 +34,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -108,7 +109,7 @@ class RecipeListFragment : Fragment() {
                                                 contentDescription = stringResource(id = R.string.search_text)
                                             )
                                         },
-                                        textStyle = MaterialTheme.typography.button,
+                                        textStyle = TextStyle(color = MaterialTheme.colors.onSurface),
                                         colors = TextFieldDefaults.textFieldColors(
                                             backgroundColor = MaterialTheme.colors.surface
                                         )
