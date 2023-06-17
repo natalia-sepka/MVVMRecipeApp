@@ -4,4 +4,7 @@
     <string name="search_label_text">Search</string>
     <string name="search_text">Text</string>
     <string name="theme_text">Change theme</string>
+    <string name="recipe_view_text">RecipeView Image</string>
+    <string name="update_by_text">By %1$s</string>
+    <string name="updated_text">Updated %1$s by %2$s</string>
 </resources>
