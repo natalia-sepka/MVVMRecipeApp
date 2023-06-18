@@ -8,19 +8,22 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import pl.sepka.mvvmrecipeapp.presentation.BaseApplication
 import pl.sepka.mvvmrecipeapp.presentation.components.CircularIndeterminateProgressBar
 import pl.sepka.mvvmrecipeapp.presentation.components.RecipeView
+import pl.sepka.mvvmrecipeapp.presentation.components.ShimmerRecipeDetails
 import pl.sepka.mvvmrecipeapp.presentation.ui.theme.AppTheme
 import javax.inject.Inject
+
+const val IMAGE_HEIGHT = 260
 
 @AndroidEntryPoint
 class RecipeFragment : Fragment() {
@@ -69,10 +72,14 @@ class RecipeFragment : Fragment() {
                     modifier = Modifier.fillMaxSize()
                 ) {
                     if (loading && recipe == null) {
-                        Text(text = "LOADING...")
+                        ShimmerRecipeDetails(imageHeight = IMAGE_HEIGHT.dp)
                     } else {
                         recipe?.let {
-                            RecipeView(recipe = it, scrollState = scrollState)
+                            RecipeView(
+                                recipe = it,
+                                scrollState = scrollState,
+                                imageHeight = IMAGE_HEIGHT
+                            )
                         }
                     }
                     CircularIndeterminateProgressBar(isDisplayed = loading)

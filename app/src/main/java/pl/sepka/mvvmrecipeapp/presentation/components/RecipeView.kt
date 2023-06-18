@@ -24,13 +24,12 @@ import pl.sepka.mvvmrecipeapp.R
 import pl.sepka.mvvmrecipeapp.domain.model.Recipe
 import pl.sepka.mvvmrecipeapp.util.DateUtil
 
-const val IMAGE_HEIGHT = 260
-
 @OptIn(ExperimentalCoilApi::class)
 @Composable
 fun RecipeView(
     recipe: Recipe,
-    scrollState: ScrollState
+    scrollState: ScrollState,
+    imageHeight: Int
 ) {
     Column(
         modifier = Modifier
@@ -44,7 +43,7 @@ fun RecipeView(
             contentDescription = stringResource(id = R.string.recipe_view_text),
             modifier = Modifier
                 .fillMaxWidth()
-                .height(IMAGE_HEIGHT.dp),
+                .height(imageHeight.dp),
             contentScale = ContentScale.Crop
         )
         Column(

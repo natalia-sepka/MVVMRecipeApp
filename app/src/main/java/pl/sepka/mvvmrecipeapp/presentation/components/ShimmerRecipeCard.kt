@@ -60,6 +60,60 @@ fun ShimmerRecipeCardItem(
     }
 }
 
+@Composable
+fun ShimmerRecipeDetails(
+    imageHeight: Dp,
+    padding: Dp = 16.dp
+) {
+    Column(modifier = Modifier.padding(bottom = padding, top = padding)) {
+        Surface(
+            shape = MaterialTheme.shapes.small,
+            modifier = Modifier
+                .padding(vertical = padding)
+        ) {
+            Spacer(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(imageHeight)
+                    .shimmerEffect()
+            )
+        }
+        Spacer(modifier = Modifier.height(padding))
+        Surface(
+            shape = MaterialTheme.shapes.small
+        ) {
+            Spacer(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(20.dp)
+                    .shimmerEffect()
+            )
+        }
+        Spacer(modifier = Modifier.height(padding))
+        Surface(
+            shape = MaterialTheme.shapes.small
+        ) {
+            Spacer(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(20.dp)
+                    .shimmerEffect()
+            )
+        }
+        Spacer(modifier = Modifier.height(padding))
+        Surface(
+            shape = MaterialTheme.shapes.small
+        ) {
+            Spacer(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(20.dp)
+                    .shimmerEffect()
+            )
+        }
+    }
+}
+
 fun Modifier.shimmerEffect(): Modifier = composed {
     var size by remember {
         mutableStateOf(IntSize.Zero)
