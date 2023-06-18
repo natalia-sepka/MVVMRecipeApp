@@ -17,7 +17,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import pl.sepka.mvvmrecipeapp.presentation.BaseApplication
-import pl.sepka.mvvmrecipeapp.presentation.components.CircularIndeterminateProgressBar
 import pl.sepka.mvvmrecipeapp.presentation.components.RecipeView
 import pl.sepka.mvvmrecipeapp.presentation.components.ShimmerRecipeDetails
 import pl.sepka.mvvmrecipeapp.presentation.ui.theme.AppTheme
@@ -60,7 +59,8 @@ class RecipeFragment : Fragment() {
         val scrollState = rememberScrollState()
 
         AppTheme(
-            darkTheme = application.isDark.value
+            darkTheme = application.isDark.value,
+            displayProgressBar = loading
         ) {
             Scaffold(
                 scaffoldState = scaffoldState,
@@ -82,7 +82,6 @@ class RecipeFragment : Fragment() {
                             )
                         }
                     }
-                    CircularIndeterminateProgressBar(isDisplayed = loading)
                 }
             }
         }

@@ -1,39 +1,31 @@
 package pl.sepka.mvvmrecipeapp.presentation.components
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import pl.sepka.mvvmrecipeapp.presentation.ui.theme.AppTheme
+import androidx.constraintlayout.compose.ConstraintLayout
 
 @Composable
 fun CircularIndeterminateProgressBar(
-    isDisplayed: Boolean
+    isDisplayed: Boolean,
+    verticalBias: Float
 ) {
     if (isDisplayed) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(20.dp),
-            horizontalArrangement = Arrangement.Center
+        ConstraintLayout(
+            modifier = Modifier.fillMaxSize()
         ) {
+            val (progressBar) = createRefs()
+            val topBias = createGuidelineFromTop(verticalBias)
             CircularProgressIndicator(
+                modifier = Modifier.constrainAs(progressBar) {
+                    top.linkTo(topBias)
+                    end.linkTo(parent.end)
+                    start.linkTo(parent.start)
+                },
                 color = MaterialTheme.colors.primary
             )
         }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun CircularProgressBarPreview() {
-    AppTheme {
-        CircularIndeterminateProgressBar(true)
     }
 }

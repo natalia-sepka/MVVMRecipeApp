@@ -63,7 +63,7 @@ class RecipeListFragment : Fragment() {
     ): View {
         return ComposeView(requireContext()).apply {
             setContent {
-                AppTheme(darkTheme = application.isDark.value) {
+                AppTheme(darkTheme = application.isDark.value, displayProgressBar = viewModel.loading.value) {
                     val recipes = viewModel.recipes.value
                     val query = viewModel.query.value
                     val selectedCategory = viewModel.selectedCategory.value
