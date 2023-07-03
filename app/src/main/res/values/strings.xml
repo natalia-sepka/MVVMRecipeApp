@@ -7,4 +7,5 @@
     <string name="recipe_view_text">RecipeView Image</string>
     <string name="update_by_text">By %1$s</string>
     <string name="updated_text">Updated %1$s by %2$s</string>
+    <string name="nav_home_text">Home</string>
 </resources>

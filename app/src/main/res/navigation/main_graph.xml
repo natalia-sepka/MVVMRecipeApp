@@ -15,5 +15,9 @@
     <fragment
         android:id="@+id/recipeFragment"
         android:name="pl.sepka.mvvmrecipeapp.presentation.ui.recipe.RecipeFragment"
-        android:label="RecipeFragment" />
+        android:label="RecipeFragment" >
+        <action
+            android:id="@+id/action_recipeFragment_to_recipeListFragment"
+            app:destination="@id/recipeListFragment" />
+    </fragment>
 </navigation>

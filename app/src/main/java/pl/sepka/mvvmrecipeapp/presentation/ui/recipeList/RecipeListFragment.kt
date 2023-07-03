@@ -25,7 +25,6 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
@@ -73,7 +72,6 @@ class RecipeListFragment : Fragment() {
                     Column {
                         Surface(
                             modifier = Modifier.fillMaxWidth(),
-                            color = Color.White,
                             elevation = 8.dp
                         ) {
                             Column {

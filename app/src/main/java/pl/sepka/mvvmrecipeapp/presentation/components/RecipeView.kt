@@ -35,6 +35,7 @@ fun RecipeView(
         modifier = Modifier
             .fillMaxWidth()
             .verticalScroll(scrollState)
+            .padding(bottom = 80.dp)
     ) {
         Image(
             painter = recipe.featuredImage?.let {
