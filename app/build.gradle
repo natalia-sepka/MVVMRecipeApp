@@ -1,3 +1,12 @@
+import dependencies.AndroidX
+import dependencies.AnnotationProcessing
+import dependencies.Google
+import dependencies.Versions
+import dependencies.Square
+import dependencies.Coil
+import dependencies.InstrumentationTest
+import dependencies.DebugTest
+
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
@@ -7,14 +16,14 @@ plugins {
 }
 
 android {
-    compileSdk 33
+    compileSdkVersion Versions.compileSdk
 
     defaultConfig {
         applicationId "pl.sepka.mvvmrecipeapp"
-        minSdk 21
-        targetSdk 33
-        versionCode 1
-        versionName "1.0"
+        minSdkVersion Versions.minSdk
+        targetSdkVersion Versions.targetSdk
+        versionCode Versions.versionCode
+        versionName Versions.versionName
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -35,13 +44,13 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
     kotlinOptions {
-        jvmTarget = '1.8'
+        jvmTarget = Versions.jvmTarget
     }
     buildFeatures {
         compose true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion "1.4.2"
+        kotlinCompilerExtensionVersion Versions.kotlin_compiler_extension
     }
     packagingOptions {
         resources {
@@ -51,63 +60,41 @@ android {
 }
 
 dependencies {
-    def app_compat = "1.6.1"
-    implementation "androidx.appcompat:appcompat:$app_compat"
+    implementation AndroidX.app_compat
 
-    def constraint_layout = "2.1.4"
-    implementation "androidx.constraintlayout:constraintlayout:$constraint_layout"
+    implementation AndroidX.constraint_layout
 
-    implementation 'androidx.core:core-ktx:1.10.1'
-    implementation 'androidx.appcompat:appcompat:1.6.1'
-    implementation 'com.google.android.material:material:1.9.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.6.1'
-    testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+    implementation AndroidX.core_ktx
+    implementation AndroidX.lifecycle_runtime_ktx
+    implementation AndroidX.activity_compose
 
-    implementation "androidx.compose.ui:ui:$compose_version"
-    implementation "androidx.compose.material:material:$compose_version"
-    implementation "androidx.compose.ui:ui-tooling-preview:$compose_version"
-    androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"
-    debugImplementation "androidx.compose.ui:ui-tooling:$compose_version"
-    debugImplementation "androidx.compose.ui:ui-test-manifest:$compose_version"
+    implementation AndroidX.compose_ui
+    implementation AndroidX.compose_material
+    implementation AndroidX.compose_preview
+    androidTestImplementation InstrumentationTest.compose_ui
+    debugImplementation DebugTest.tooling
+    debugImplementation DebugTest.test_manifest
 
-    def nav_version = "2.5.3"
-    implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
-    implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
+    implementation AndroidX.nav_fragment_ktx
+    implementation AndroidX.nav_ui_ktx
 
-    def retrofit_version = "2.9.0"
-    implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
-    implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
+    implementation Square.retrofit
+    implementation Google.gson
+    implementation Square.retrofit_gson
 
-    implementation "com.squareup.retrofit2:converter-gson:2.3.0"
+    implementation Google.hilt_android
+    kapt AnnotationProcessing.hilt_compiler
 
-    def hilt_version = "2.44"
-    implementation "com.google.dagger:hilt-android:$hilt_version"
-    kapt "com.google.dagger:hilt-compiler:$hilt_version"
+    implementation AndroidX.hilt_lifecycle
+    kapt AnnotationProcessing.hilt_lifecycle
 
+    implementation AndroidX.work_runtime
 
-    def hilt_lifecycle = "1.0.0"
-    implementation "androidx.hilt:hilt-work:$hilt_lifecycle"
-    kapt "androidx.hilt:hilt-compiler:$hilt_lifecycle"
+    implementation AndroidX.navigation_hilt
 
-    def work_runtime = "2.8.1"
-    implementation "androidx.work:work-runtime-ktx:$work_runtime"
+    implementation Coil.coil
 
-    def hilt_navigation = "1.1.0-alpha02"
-    implementation "androidx.hilt:hilt-navigation:$hilt_navigation"
-
-    implementation "androidx.activity:activity-compose:1.7.1"
-
-    implementation "androidx.fragment:fragment-ktx:1.5.7"
-
-    def coil = "1.3.1"
-    implementation "io.coil-kt:coil-compose:$coil"
-
-    def constraint_compose = "1.0.1"
-    implementation "androidx.constraintlayout:constraintlayout-compose:$constraint_compose"
-
+    implementation AndroidX.constraint_compose
 }
 
 kapt {
