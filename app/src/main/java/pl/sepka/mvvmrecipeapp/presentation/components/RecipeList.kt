@@ -22,7 +22,7 @@ fun RecipeList(
     onChangeRecipeScrollPosition: (Int) -> Unit,
     page: Int,
     onNextPage: (RecipeListEvent) -> Unit,
-    onNavigateToRecipeDetailScreen: (Int) -> Unit
+    onNavigateToRecipeDetailScreen: (Recipe) -> Unit
 ) {
     Box(
         modifier = Modifier
@@ -46,7 +46,7 @@ fun RecipeList(
                     }
                     RecipeCard(
                         recipe = recipe,
-                        onClick = { recipe.id?.let { onNavigateToRecipeDetailScreen(it) } }
+                        onClick = { onNavigateToRecipeDetailScreen(recipe) }
                     )
                 }
             }

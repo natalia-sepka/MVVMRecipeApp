@@ -30,6 +30,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import pl.sepka.mvvmrecipeapp.R
+import pl.sepka.mvvmrecipeapp.domain.model.Recipe
 import pl.sepka.mvvmrecipeapp.presentation.components.FoodCategoryChip
 import pl.sepka.mvvmrecipeapp.presentation.components.RecipeList
 import pl.sepka.mvvmrecipeapp.presentation.ui.theme.AppTheme
@@ -39,6 +40,7 @@ import pl.sepka.mvvmrecipeapp.presentation.ui.theme.AppTheme
 fun RecipeListScreen(
     isDarkTheme: Boolean,
     onToggleTheme: () -> Unit,
+    onNavigateToRecipeDetailScreen: (Recipe) -> Unit,
     viewModel: RecipeListViewModel
 ) {
     AppTheme(darkTheme = isDarkTheme, displayProgressBar = viewModel.loading.value) {
@@ -131,9 +133,7 @@ fun RecipeListScreen(
                 onChangeRecipeScrollPosition = viewModel::onChangeRecipeScrollPosition,
                 page = page,
                 onNextPage = viewModel::onTriggerEvent,
-                onNavigateToRecipeDetailScreen = {
-                    // TODO later
-                }
+                onNavigateToRecipeDetailScreen = onNavigateToRecipeDetailScreen
             )
         }
     }

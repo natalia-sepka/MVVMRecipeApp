@@ -8,6 +8,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -31,7 +32,7 @@ class MainActivity : AppCompatActivity() {
                     navController = navController,
                     startDestination = Screen.RecipeList.route,
                     builder = {
-                        addRecipeListScreen()
+                        addRecipeListScreen(navController = navController)
                         addRecipeDetailScreen()
                     }
                 )
@@ -39,13 +40,19 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun NavGraphBuilder.addRecipeListScreen() {
+    private fun NavGraphBuilder.addRecipeListScreen(
+        navController: NavController
+    ) {
         composable(
             route = Screen.RecipeList.route
         ) {
             RecipeListScreen(
                 isDarkTheme = (application as BaseApplication).isDark.value,
                 onToggleTheme = { (application as BaseApplication)::toggleLightTheme },
+                onNavigateToRecipeDetailScreen = {
+                    val route = Screen.RecipeList.route + "/${it.id}"
+                    navController.navigate(route)
+                },
                 viewModel = hiltViewModel()
             )
         }
@@ -53,11 +60,12 @@ class MainActivity : AppCompatActivity() {
 
     private fun NavGraphBuilder.addRecipeDetailScreen() {
         composable(
-            route = Screen.RecipeDetail.route
+            route = Screen.RecipeDetail.route + "/{recipeId}",
+            arguments = Screen.RecipeDetail.arguments
         ) {
             RecipeDetailScreen(
                 isDarkTheme = (application as BaseApplication).isDark.value,
-                recipeId = 1,
+                recipeId = it.arguments?.getInt("recipeId"),
                 viewModel = hiltViewModel()
             )
         }
