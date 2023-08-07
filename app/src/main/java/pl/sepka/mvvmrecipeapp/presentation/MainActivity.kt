@@ -33,7 +33,7 @@ class MainActivity : AppCompatActivity() {
                     startDestination = Screen.RecipeList.route,
                     builder = {
                         addRecipeListScreen(navController = navController)
-                        addRecipeDetailScreen()
+                        addRecipeDetailsScreen()
                     }
                 )
             }
@@ -50,7 +50,7 @@ class MainActivity : AppCompatActivity() {
                 isDarkTheme = (application as BaseApplication).isDark.value,
                 onToggleTheme = { (application as BaseApplication)::toggleLightTheme },
                 onNavigateToRecipeDetailScreen = {
-                    val route = Screen.RecipeList.route + "/${it.id}"
+                    val route = Screen.RecipeDetail.route + "/${it.id}"
                     navController.navigate(route)
                 },
                 viewModel = hiltViewModel()
@@ -58,7 +58,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun NavGraphBuilder.addRecipeDetailScreen() {
+    private fun NavGraphBuilder.addRecipeDetailsScreen() {
         composable(
             route = Screen.RecipeDetail.route + "/{recipeId}",
             arguments = Screen.RecipeDetail.arguments

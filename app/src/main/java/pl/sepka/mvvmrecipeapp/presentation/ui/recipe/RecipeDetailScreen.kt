@@ -18,12 +18,20 @@ const val IMAGE_HEIGHT = 260
 fun RecipeDetailScreen(
     isDarkTheme: Boolean,
     recipeId: Int?,
-    viewModel: RecipeViewModel
+    viewModel: RecipeDetailViewModel
 ) {
     val loading = viewModel.loading.value
     val recipe = viewModel.recipe.value
     val scaffoldState = rememberScaffoldState()
     val scrollState = rememberScrollState()
+
+    recipeId?.let { id ->
+        val onLoad = viewModel.onLoad.value
+        if (!onLoad) {
+            viewModel.onLoad.value = true
+            viewModel.onTriggerEvent(RecipeDetailEvent.GetRecipeDetailEvent(id))
+        }
+    }
 
     AppTheme(
         darkTheme = isDarkTheme,

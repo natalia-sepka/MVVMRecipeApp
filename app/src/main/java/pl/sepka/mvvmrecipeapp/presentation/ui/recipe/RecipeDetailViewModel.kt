@@ -17,26 +17,25 @@ import javax.inject.Inject
 const val STATE_KEY_RECIPE = "recipe.state.key.selected_recipeId"
 
 @HiltViewModel
-class RecipeViewModel @Inject constructor(
+class RecipeDetailViewModel @Inject constructor(
     private val recipeRepository: RecipeRepository,
     private val state: SavedStateHandle
-    // private val token: String,
-    // @Assisted private val state: SavedStateHandle
 ) : ViewModel() {
     val recipe: MutableState<Recipe?> = mutableStateOf(null)
     val loading = mutableStateOf(false)
+    val onLoad = mutableStateOf(false)
 
     init {
         state.get<Int>(STATE_KEY_RECIPE)?.let {
-            onTriggerEvent(RecipeEvent.GetRecipeEvent(it))
+            onTriggerEvent(RecipeDetailEvent.GetRecipeDetailEvent(it))
         }
     }
 
-    fun onTriggerEvent(event: RecipeEvent) {
+    fun onTriggerEvent(event: RecipeDetailEvent) {
         viewModelScope.launch {
             try {
                 when (event) {
-                    is RecipeEvent.GetRecipeEvent -> {
+                    is RecipeDetailEvent.GetRecipeDetailEvent -> {
                         if (recipe.value == null) {
                             getRecipe(event.id)
                         }
