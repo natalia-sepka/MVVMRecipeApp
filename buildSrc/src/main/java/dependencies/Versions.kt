@@ -40,4 +40,5 @@ object Versions {
     const val hilt_lifecycle = "1.0.0"
     const val lifecycle_runtime_ktx = "2.6.1"
     const val activity_compose = "1.7.1"
+    const val hilt_navigation_compose = "1.0.0"
 }

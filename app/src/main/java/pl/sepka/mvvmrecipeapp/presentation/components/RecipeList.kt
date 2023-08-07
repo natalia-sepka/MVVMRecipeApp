@@ -1,6 +1,5 @@
 package pl.sepka.mvvmrecipeapp.presentation.components
 
-import android.os.Bundle
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -10,12 +9,11 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
-import pl.sepka.mvvmrecipeapp.R
 import pl.sepka.mvvmrecipeapp.domain.model.Recipe
 import pl.sepka.mvvmrecipeapp.presentation.ui.recipeList.PAGE_SIZE
 import pl.sepka.mvvmrecipeapp.presentation.ui.recipeList.RecipeListEvent
-import pl.sepka.mvvmrecipeapp.presentation.ui.recipeList.SHIMMERING_RECIPE_LIST_SIZE
+
+const val SHIMMERING_RECIPE_LIST_SIZE = 10
 
 @Composable
 fun RecipeList(
@@ -24,7 +22,7 @@ fun RecipeList(
     onChangeRecipeScrollPosition: (Int) -> Unit,
     page: Int,
     onNextPage: (RecipeListEvent) -> Unit,
-    navController: NavController
+    onNavigateToRecipeDetailScreen: (Int) -> Unit
 ) {
     Box(
         modifier = Modifier
@@ -48,14 +46,7 @@ fun RecipeList(
                     }
                     RecipeCard(
                         recipe = recipe,
-                        onClick = {
-                            val bundle = Bundle()
-                            recipe.id?.let { bundle.putInt("recipeId", it) }
-                            navController.navigate(
-                                R.id.action_recipeListFragment_to_recipeFragment,
-                                bundle
-                            )
-                        }
+                        onClick = { recipe.id?.let { onNavigateToRecipeDetailScreen(it) } }
                     )
                 }
             }

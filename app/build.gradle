@@ -71,12 +71,12 @@ dependencies {
     implementation AndroidX.compose_ui
     implementation AndroidX.compose_material
     implementation AndroidX.compose_preview
+    implementation AndroidX.constraint_compose
+    implementation AndroidX.hilt_navigation_compose
+
     androidTestImplementation InstrumentationTest.compose_ui
     debugImplementation DebugTest.tooling
     debugImplementation DebugTest.test_manifest
-
-    implementation AndroidX.nav_fragment_ktx
-    implementation AndroidX.nav_ui_ktx
 
     implementation Square.retrofit
     implementation Google.gson
