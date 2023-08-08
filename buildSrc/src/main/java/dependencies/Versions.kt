@@ -31,7 +31,7 @@ object Versions {
     const val retrofit = "2.9.0"
     const val okHttp = "4.9.0"
     const val leak_canary = "2.5"
-    const val room = "2.2.6"
+    const val room = "2.5.1"
     const val junit_jupiter = "5.7.0"
     const val datastore = "1.0.0-alpha06"
     const val work_runtime = "2.8.1"

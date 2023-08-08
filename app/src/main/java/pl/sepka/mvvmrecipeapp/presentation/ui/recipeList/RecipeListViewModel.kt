@@ -11,10 +11,10 @@ import kotlinx.coroutines.launch
 import pl.sepka.mvvmrecipeapp.BuildConfig
 import pl.sepka.mvvmrecipeapp.domain.model.Recipe
 import pl.sepka.mvvmrecipeapp.repository.RecipeRepository
+import pl.sepka.mvvmrecipeapp.util.RECIPE_PAGINATION_PAGE_SIZE
 import pl.sepka.mvvmrecipeapp.util.TAG
 import javax.inject.Inject
 
-const val PAGE_SIZE = 30
 const val STATE_KEY_PAGE = "recipe.state.page.key"
 const val STATE_KEY_QUERY = "recipe.state.query.key"
 const val STATE_KEY_LIST_POSITION = "recipe.state.query.list.position"
@@ -105,7 +105,7 @@ constructor(
 
     private suspend fun nextPage() {
         // prevent duplicate events due to recompose happening to quickly
-        if ((recipeListScrollPosition + 1) >= (page.value * PAGE_SIZE)) {
+        if ((recipeListScrollPosition + 1) >= (page.value * RECIPE_PAGINATION_PAGE_SIZE)) {
             loading.value = true
             incrementPage()
             if (page.value > 1) {

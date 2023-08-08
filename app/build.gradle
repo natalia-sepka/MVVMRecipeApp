@@ -95,6 +95,10 @@ dependencies {
     implementation Coil.coil
 
     implementation AndroidX.constraint_compose
+
+    implementation AndroidX.room_runtime
+    implementation AndroidX.room_ktx
+    kapt AnnotationProcessing.room_compiler
 }
 
 kapt {
