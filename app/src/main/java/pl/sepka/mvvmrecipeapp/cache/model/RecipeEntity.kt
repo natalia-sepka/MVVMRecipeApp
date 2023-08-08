@@ -3,34 +3,38 @@ package pl.sepka.mvvmrecipeapp.cache.model
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import java.util.*
 
 @Entity(tableName = "recipes")
 data class RecipeEntity(
     @PrimaryKey(autoGenerate = false)
     @ColumnInfo(name = "id")
-    var id: Int,
+    val id: Int,
 
     @ColumnInfo(name = "title")
-    var title: Int,
+    val title: String,
 
     @ColumnInfo(name = "publisher")
-    var publisher: String,
+    val publisher: String,
+
+    @ColumnInfo(name = "featured_image")
+    val featuredImage: String,
 
     @ColumnInfo(name = "rating")
-    var rating: Int,
+    val rating: Int,
 
     @ColumnInfo(name = "source_url")
-    var sourceUrl: String,
+    val sourceUrl: String,
 
     @ColumnInfo(name = "ingredients")
-    var ingredients: String,
+    val ingredients: List<String>,
 
     @ColumnInfo(name = "date_added")
-    var dateAdded: Long,
+    val dateAdded: Date,
 
     @ColumnInfo(name = "date_updated")
-    var dateUpdated: Long,
+    val dateUpdated: Date,
 
     @ColumnInfo(name = "date_refreshed")
-    var dateRefreshed: Long
+    val dateRefreshed: Date
 )

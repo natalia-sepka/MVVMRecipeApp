@@ -15,7 +15,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil.annotation.ExperimentalCoilApi
@@ -38,9 +37,7 @@ fun RecipeView(
             .padding(bottom = 80.dp)
     ) {
         Image(
-            painter = recipe.featuredImage?.let {
-                rememberImagePainter(it)
-            } ?: painterResource(id = R.drawable.empty_plate),
+            painter = rememberImagePainter(recipe.featuredImage),
             contentDescription = stringResource(id = R.string.recipe_view_text),
             modifier = Modifier
                 .fillMaxWidth()
@@ -57,15 +54,13 @@ fun RecipeView(
                     .fillMaxWidth()
                     .padding(8.dp)
             ) {
-                recipe.title?.let {
-                    Text(
-                        text = it,
-                        modifier = Modifier
-                            .fillMaxWidth(0.85f)
-                            .wrapContentWidth(Alignment.Start),
-                        style = MaterialTheme.typography.h3
-                    )
-                }
+                Text(
+                    text = recipe.title,
+                    modifier = Modifier
+                        .fillMaxWidth(0.85f)
+                        .wrapContentWidth(Alignment.Start),
+                    style = MaterialTheme.typography.h3
+                )
                 val rank = recipe.rating.toString()
                 Text(
                     text = rank,
@@ -76,15 +71,13 @@ fun RecipeView(
                     style = MaterialTheme.typography.h5
                 )
             }
-            getUpdatedText(recipe = recipe)?.let {
-                Text(
-                    text = it,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 8.dp),
-                    style = MaterialTheme.typography.caption
-                )
-            }
+            Text(
+                text = getUpdatedText(recipe = recipe),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 8.dp),
+                style = MaterialTheme.typography.caption
+            )
             for (ingredient in recipe.ingredients) {
                 Text(
                     text = ingredient,
@@ -99,12 +92,8 @@ fun RecipeView(
 }
 
 @Composable
-private fun getUpdatedText(recipe: Recipe) = recipe.dateUpdated?.let {
-    recipe.publisher?.let { p ->
-        stringResource(
-            R.string.updated_text,
-            DateUtil.dateToSlashText(it),
-            p
-        )
-    }
-} ?: recipe.publisher?.let { stringResource(R.string.update_by_text, it) }
+private fun getUpdatedText(recipe: Recipe) = stringResource(
+    R.string.updated_text,
+    DateUtil.dateToSlashText(recipe.dateUpdated),
+    recipe.publisher
+)

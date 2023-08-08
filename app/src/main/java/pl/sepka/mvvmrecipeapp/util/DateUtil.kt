@@ -13,4 +13,10 @@ object DateUtil {
 
     @SuppressLint
     fun dateToDashText(date: Date): String = SimpleDateFormat(dashPattern).format(date)
+
+    fun longToDate(long: Long) = Date(long)
+
+    fun dateToLongInSecs(date: Date) = date.time / 1000
+
+    fun createTimestamp() = Date()
 }
