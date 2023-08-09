@@ -20,7 +20,7 @@ import javax.inject.Inject
 
 const val STATE_KEY_PAGE = "recipe.state.page.key"
 const val STATE_KEY_QUERY = "recipe.state.query.key"
-const val STATE_KEY_LIST_POSITION = "recipe.state.query.list.position"
+const val STATE_KEY_LIST_POSITION = "recipe.state.query.list_position"
 const val STATE_KEY_SELECTED_CATEGORY = "recipe.state.query.selected_category"
 
 @HiltViewModel
@@ -101,31 +101,40 @@ constructor(
 
     private fun newSearch() {
         resetSearchState()
-        searchRecipeUseCase.execute(page = page.value, query = query.value, token = BuildConfig.TOKEN)
-            .onEach {
-                loading.value = it.loading
-                it.data?.let { list ->
-                    recipes.value = list
-                }
-                it.error?.let { error ->
-                    Log.e(TAG, "newSearch: $error")
-                    // handle error
-                }
-            }.launchIn(viewModelScope)
+        searchRecipeUseCase.invoke(
+            SearchRecipeUseCase.Params(
+                page = page.value,
+                query = query.value,
+                token = BuildConfig.TOKEN
+            )
+        ).onEach {
+            loading.value = it.loading
+            it.data?.let { list ->
+                recipes.value = list
+            }
+            it.error?.let { error ->
+                Log.e(TAG, "newSearch: $error")
+                // handle error
+            }
+        }.launchIn(viewModelScope)
     }
 
-    private suspend fun nextPage() {
+    private fun nextPage() {
         // prevent duplicate events due to recompose happening to quickly
         if ((recipeListScrollPosition + 1) >= (page.value * RECIPE_PAGINATION_PAGE_SIZE)) {
             incrementPage()
             if (page.value > 1) {
-                searchRecipeUseCase.execute(
-                    page = page.value,
-                    query = query.value,
-                    token = BuildConfig.TOKEN
+                searchRecipeUseCase.invoke(
+                    SearchRecipeUseCase.Params(
+                        page = page.value,
+                        query = query.value,
+                        token = BuildConfig.TOKEN
+                    )
                 ).onEach {
                     loading.value = it.loading
-                    it.data?.let { list -> appendRecipes(list) }
+                    it.data?.let { list ->
+                        appendRecipes(list)
+                    }
                     it.error?.let { error ->
                         Log.e(TAG, "nextPage: $error")
                     }
@@ -137,8 +146,9 @@ constructor(
     /**
      * Append new recipes to the current list of recipes
      */
-    private fun appendRecipes(recipe: List<Recipe>) {
+    private fun appendRecipes(recipes: List<Recipe>) {
         val current = ArrayList(this.recipes.value)
+        current.addAll(recipes)
         this.recipes.value = current
     }
 
