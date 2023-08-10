@@ -12,8 +12,8 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import pl.sepka.mvvmrecipeapp.BuildConfig
 import pl.sepka.mvvmrecipeapp.domain.model.Recipe
+import pl.sepka.mvvmrecipeapp.interactors.recipe_list.RestoreRecipesUseCase
 import pl.sepka.mvvmrecipeapp.interactors.recipe_list.SearchRecipeUseCase
-import pl.sepka.mvvmrecipeapp.repository.RecipeRepository
 import pl.sepka.mvvmrecipeapp.util.RECIPE_PAGINATION_PAGE_SIZE
 import pl.sepka.mvvmrecipeapp.util.TAG
 import javax.inject.Inject
@@ -27,9 +27,9 @@ const val STATE_KEY_SELECTED_CATEGORY = "recipe.state.query.selected_category"
 class RecipeListViewModel
 @Inject
 constructor(
-    private val repository: RecipeRepository,
     private val savedStateHandle: SavedStateHandle,
-    private val searchRecipeUseCase: SearchRecipeUseCase
+    private val searchRecipeUseCase: SearchRecipeUseCase,
+    private val restoreRecipeUseCase: RestoreRecipesUseCase
 ) : ViewModel() {
 
     val recipes: MutableState<List<Recipe>> = mutableStateOf(listOf())
@@ -78,21 +78,23 @@ constructor(
         }
     }
 
-    private suspend fun restoreState() {
-        loading.value = true
-        val results: MutableList<Recipe> = mutableListOf()
-        for (p in 1..page.value) {
-            val result = repository.search(
-                token = BuildConfig.TOKEN,
-                page = p,
-                query = query.value
+    private fun restoreState() {
+        restoreRecipeUseCase.invoke(
+            RestoreRecipesUseCase.Params(
+                page = page.value,
+                query = query.value,
+                token = BuildConfig.TOKEN
             )
-            results.addAll(result)
-            if (p == page.value) {
-                recipes.value = results
-                loading.value = false
+        ).onEach {
+            loading.value = it.loading
+            it.data?.let { list ->
+                recipes.value = list
             }
-        }
+            it.error?.let { error ->
+                Log.e(TAG, ": $error")
+                // handle error
+            }
+        }.launchIn(viewModelScope)
     }
 
     fun onQueryChanged(query: String) {
