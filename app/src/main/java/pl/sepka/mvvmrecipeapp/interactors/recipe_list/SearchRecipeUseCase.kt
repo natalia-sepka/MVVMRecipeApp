@@ -20,6 +20,11 @@ class SearchRecipeUseCase(
         emit(DataState.loading())
 
         // TODO ("Check if there is an internet connection")
+
+        // only for learning purpose
+        if (params.query == "error") {
+            throw Exception("Search failed!")
+        }
         val recipes = recipeRepository.search(
             token = params.token,
             page = params.page,

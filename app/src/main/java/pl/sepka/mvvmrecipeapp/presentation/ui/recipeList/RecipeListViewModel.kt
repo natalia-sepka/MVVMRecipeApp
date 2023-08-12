@@ -14,6 +14,7 @@ import pl.sepka.mvvmrecipeapp.BuildConfig
 import pl.sepka.mvvmrecipeapp.domain.model.Recipe
 import pl.sepka.mvvmrecipeapp.interactors.recipe_list.RestoreRecipesUseCase
 import pl.sepka.mvvmrecipeapp.interactors.recipe_list.SearchRecipeUseCase
+import pl.sepka.mvvmrecipeapp.presentation.ui.util.DialogQueue
 import pl.sepka.mvvmrecipeapp.util.RECIPE_PAGINATION_PAGE_SIZE
 import pl.sepka.mvvmrecipeapp.util.TAG
 import javax.inject.Inject
@@ -38,6 +39,7 @@ constructor(
     val loading = mutableStateOf(false)
     val page = mutableStateOf(1)
     private var recipeListScrollPosition = 0
+    val dialogQueue = DialogQueue()
 
     init {
         savedStateHandle.get<Int>(STATE_KEY_PAGE)?.let { page ->
@@ -92,7 +94,7 @@ constructor(
             }
             it.error?.let { error ->
                 Log.e(TAG, ": $error")
-                // handle error
+                dialogQueue.appendErrorMessage("Error", error)
             }
         }.launchIn(viewModelScope)
     }
@@ -116,7 +118,7 @@ constructor(
             }
             it.error?.let { error ->
                 Log.e(TAG, "newSearch: $error")
-                // handle error
+                dialogQueue.appendErrorMessage("Error", error)
             }
         }.launchIn(viewModelScope)
     }
@@ -139,6 +141,7 @@ constructor(
                     }
                     it.error?.let { error ->
                         Log.e(TAG, "nextPage: $error")
+                        dialogQueue.appendErrorMessage("Error", error)
                     }
                 }.launchIn(viewModelScope)
             }

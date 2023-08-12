@@ -13,6 +13,7 @@ import kotlinx.coroutines.launch
 import pl.sepka.mvvmrecipeapp.BuildConfig
 import pl.sepka.mvvmrecipeapp.domain.model.Recipe
 import pl.sepka.mvvmrecipeapp.interactors.recipe.GetRecipeUseCase
+import pl.sepka.mvvmrecipeapp.presentation.ui.util.DialogQueue
 import pl.sepka.mvvmrecipeapp.util.TAG
 import javax.inject.Inject
 
@@ -26,6 +27,7 @@ class RecipeDetailViewModel @Inject constructor(
     val recipe: MutableState<Recipe?> = mutableStateOf(null)
     val loading = mutableStateOf(false)
     val onLoad = mutableStateOf(false)
+    val dialogQueue = DialogQueue()
 
     init {
         state.get<Int>(STATE_KEY_RECIPE)?.let {
@@ -59,7 +61,7 @@ class RecipeDetailViewModel @Inject constructor(
                 }
                 it.error?.let { error ->
                     Log.e(TAG, "getRecipe: $error")
-                    // handle error
+                    dialogQueue.appendErrorMessage("Error", error)
                 }
             }.launchIn(viewModelScope)
     }

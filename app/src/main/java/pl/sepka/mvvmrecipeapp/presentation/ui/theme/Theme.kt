@@ -11,6 +11,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import pl.sepka.mvvmrecipeapp.presentation.components.CircularIndeterminateProgressBar
+import pl.sepka.mvvmrecipeapp.presentation.components.GenericDialog
+import pl.sepka.mvvmrecipeapp.presentation.components.GenericDialogInfo
+import java.util.*
 
 private val LightThemeColors = lightColors(
     primary = Blue600,
@@ -43,6 +46,7 @@ private val DarkThemeColors = darkColors(
 fun AppTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     displayProgressBar: Boolean,
+    dialogQueue: Queue<GenericDialogInfo>,
     content: @Composable () -> Unit
 ) {
     val colors = if (darkTheme) {
@@ -62,6 +66,23 @@ fun AppTheme(
         ) {
             content()
             CircularIndeterminateProgressBar(isDisplayed = displayProgressBar, 0.3f)
+
+            ProcessDialogQueue(dialogQueue = dialogQueue)
         }
+    }
+}
+
+@Composable
+fun ProcessDialogQueue(
+    dialogQueue: Queue<GenericDialogInfo>
+) {
+    dialogQueue.peek()?.let { dialogInfo ->
+        GenericDialog(
+            onDismiss = dialogInfo.onDismiss,
+            title = dialogInfo.title,
+            description = dialogInfo.description,
+            positiveAction = dialogInfo.positiveAction,
+            negativeAction = dialogInfo.negativeAction
+        )
     }
 }

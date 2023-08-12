@@ -24,6 +24,7 @@ fun RecipeDetailScreen(
     val recipe = viewModel.recipe.value
     val scaffoldState = rememberScaffoldState()
     val scrollState = rememberScrollState()
+    val dialogQueue = viewModel.dialogQueue
 
     recipeId?.let { id ->
         val onLoad = viewModel.onLoad.value
@@ -35,7 +36,8 @@ fun RecipeDetailScreen(
 
     AppTheme(
         darkTheme = isDarkTheme,
-        displayProgressBar = loading
+        displayProgressBar = loading,
+        dialogQueue = dialogQueue.queue.value
     ) {
         Scaffold(
             scaffoldState = scaffoldState,

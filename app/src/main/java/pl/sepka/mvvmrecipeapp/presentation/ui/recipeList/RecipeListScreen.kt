@@ -43,13 +43,20 @@ fun RecipeListScreen(
     onNavigateToRecipeDetailScreen: (Recipe) -> Unit,
     viewModel: RecipeListViewModel
 ) {
-    AppTheme(darkTheme = isDarkTheme, displayProgressBar = viewModel.loading.value) {
+    val dialogQueue = viewModel.dialogQueue
+
+    AppTheme(
+        darkTheme = isDarkTheme,
+        displayProgressBar = viewModel.loading.value,
+        dialogQueue = dialogQueue.queue.value
+    ) {
         val recipes = viewModel.recipes.value
         val query = viewModel.query.value
         val selectedCategory = viewModel.selectedCategory.value
         val loading = viewModel.loading.value
         val keyboardController = LocalSoftwareKeyboardController.current
         val page = viewModel.page.value
+
         Column {
             Surface(
                 modifier = Modifier.fillMaxWidth(),
