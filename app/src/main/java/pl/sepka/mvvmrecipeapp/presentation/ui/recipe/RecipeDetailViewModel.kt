@@ -14,6 +14,7 @@ import pl.sepka.mvvmrecipeapp.BuildConfig
 import pl.sepka.mvvmrecipeapp.domain.model.Recipe
 import pl.sepka.mvvmrecipeapp.interactors.recipe.GetRecipeUseCase
 import pl.sepka.mvvmrecipeapp.presentation.ui.util.DialogQueue
+import pl.sepka.mvvmrecipeapp.presentation.ui.util.InternetConnectionManager
 import pl.sepka.mvvmrecipeapp.util.TAG
 import javax.inject.Inject
 
@@ -22,7 +23,8 @@ const val STATE_KEY_RECIPE = "recipe.state.key.selected_recipeId"
 @HiltViewModel
 class RecipeDetailViewModel @Inject constructor(
     private val state: SavedStateHandle,
-    private val getRecipeUseCase: GetRecipeUseCase
+    private val getRecipeUseCase: GetRecipeUseCase,
+    private val internetConnectionManager: InternetConnectionManager
 ) : ViewModel() {
     val recipe: MutableState<Recipe?> = mutableStateOf(null)
     val loading = mutableStateOf(false)
@@ -52,17 +54,22 @@ class RecipeDetailViewModel @Inject constructor(
     }
 
     private fun getRecipe(id: Int) {
-        getRecipeUseCase.invoke(GetRecipeUseCase.Params(recipeId = id, token = BuildConfig.TOKEN))
-            .onEach {
-                loading.value = it.loading
-                it.data?.let { recipe ->
-                    this.recipe.value = recipe
-                    state[STATE_KEY_RECIPE] = recipe.id
-                }
-                it.error?.let { error ->
-                    Log.e(TAG, "getRecipe: $error")
-                    dialogQueue.appendErrorMessage("Error", error)
-                }
-            }.launchIn(viewModelScope)
+        getRecipeUseCase.invoke(
+            GetRecipeUseCase.Params(
+                recipeId = id,
+                token = BuildConfig.TOKEN,
+                isNetworkAvailable = internetConnectionManager.isNetworkAvailable.value
+            )
+        ).onEach {
+            loading.value = it.loading
+            it.data?.let { recipe ->
+                this.recipe.value = recipe
+                state[STATE_KEY_RECIPE] = recipe.id
+            }
+            it.error?.let { error ->
+                Log.e(TAG, "getRecipe: $error")
+                dialogQueue.appendErrorMessage("Error", error)
+            }
+        }.launchIn(viewModelScope)
     }
 }

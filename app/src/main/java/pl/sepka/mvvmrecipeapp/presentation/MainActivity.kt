@@ -17,9 +17,13 @@ import dagger.hilt.android.AndroidEntryPoint
 import pl.sepka.mvvmrecipeapp.presentation.navigation.Screen
 import pl.sepka.mvvmrecipeapp.presentation.ui.recipe.RecipeDetailScreen
 import pl.sepka.mvvmrecipeapp.presentation.ui.recipeList.RecipeListScreen
+import pl.sepka.mvvmrecipeapp.presentation.ui.util.InternetConnectionManager
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
+    @Inject
+    lateinit var internetConnectionManager: InternetConnectionManager
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -40,6 +44,16 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun onStart() {
+        super.onStart()
+        internetConnectionManager.registerConnectionObserver(this)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        internetConnectionManager.unregisterConnectionObserver(this)
+    }
+
     private fun NavGraphBuilder.addRecipeListScreen(
         navController: NavController
     ) {
@@ -48,6 +62,7 @@ class MainActivity : AppCompatActivity() {
         ) {
             RecipeListScreen(
                 isDarkTheme = (application as BaseApplication).isDark.value,
+                isNetworkAvailable = internetConnectionManager.isNetworkAvailable.value,
                 onToggleTheme = { (application as BaseApplication)::toggleLightTheme },
                 onNavigateToRecipeDetailScreen = {
                     val route = Screen.RecipeDetail.route + "/${it.id}"
@@ -65,6 +80,7 @@ class MainActivity : AppCompatActivity() {
         ) {
             RecipeDetailScreen(
                 isDarkTheme = (application as BaseApplication).isDark.value,
+                isNetworkAvailable = internetConnectionManager.isNetworkAvailable.value,
                 recipeId = it.arguments?.getInt("recipeId"),
                 viewModel = hiltViewModel()
             )

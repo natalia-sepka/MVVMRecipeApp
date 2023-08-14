@@ -39,6 +39,7 @@ import pl.sepka.mvvmrecipeapp.presentation.ui.theme.AppTheme
 @Composable
 fun RecipeListScreen(
     isDarkTheme: Boolean,
+    isNetworkAvailable: Boolean,
     onToggleTheme: () -> Unit,
     onNavigateToRecipeDetailScreen: (Recipe) -> Unit,
     viewModel: RecipeListViewModel
@@ -47,6 +48,7 @@ fun RecipeListScreen(
 
     AppTheme(
         darkTheme = isDarkTheme,
+        isNetworkAvailable = isNetworkAvailable,
         displayProgressBar = viewModel.loading.value,
         dialogQueue = dialogQueue.queue.value
     ) {

@@ -15,6 +15,7 @@ import pl.sepka.mvvmrecipeapp.domain.model.Recipe
 import pl.sepka.mvvmrecipeapp.interactors.recipe_list.RestoreRecipesUseCase
 import pl.sepka.mvvmrecipeapp.interactors.recipe_list.SearchRecipeUseCase
 import pl.sepka.mvvmrecipeapp.presentation.ui.util.DialogQueue
+import pl.sepka.mvvmrecipeapp.presentation.ui.util.InternetConnectionManager
 import pl.sepka.mvvmrecipeapp.util.RECIPE_PAGINATION_PAGE_SIZE
 import pl.sepka.mvvmrecipeapp.util.TAG
 import javax.inject.Inject
@@ -30,7 +31,8 @@ class RecipeListViewModel
 constructor(
     private val savedStateHandle: SavedStateHandle,
     private val searchRecipeUseCase: SearchRecipeUseCase,
-    private val restoreRecipeUseCase: RestoreRecipesUseCase
+    private val restoreRecipesUseCase: RestoreRecipesUseCase,
+    private val internetConnectionManager: InternetConnectionManager
 ) : ViewModel() {
 
     val recipes: MutableState<List<Recipe>> = mutableStateOf(listOf())
@@ -81,7 +83,7 @@ constructor(
     }
 
     private fun restoreState() {
-        restoreRecipeUseCase.invoke(
+        restoreRecipesUseCase.invoke(
             RestoreRecipesUseCase.Params(
                 page = page.value,
                 query = query.value,
@@ -109,13 +111,15 @@ constructor(
             SearchRecipeUseCase.Params(
                 page = page.value,
                 query = query.value,
-                token = BuildConfig.TOKEN
+                token = BuildConfig.TOKEN,
+                isNetworkAvailable = internetConnectionManager.isNetworkAvailable.value
             )
         ).onEach {
             loading.value = it.loading
             it.data?.let { list ->
                 recipes.value = list
             }
+
             it.error?.let { error ->
                 Log.e(TAG, "newSearch: $error")
                 dialogQueue.appendErrorMessage("Error", error)
@@ -132,13 +136,12 @@ constructor(
                     SearchRecipeUseCase.Params(
                         page = page.value,
                         query = query.value,
-                        token = BuildConfig.TOKEN
+                        token = BuildConfig.TOKEN,
+                        isNetworkAvailable = internetConnectionManager.isNetworkAvailable.value
                     )
                 ).onEach {
                     loading.value = it.loading
-                    it.data?.let { list ->
-                        appendRecipes(list)
-                    }
+                    it.data?.let { list -> appendRecipes(list) }
                     it.error?.let { error ->
                         Log.e(TAG, "nextPage: $error")
                         dialogQueue.appendErrorMessage("Error", error)
@@ -187,21 +190,21 @@ constructor(
 
     private fun setListScrollPosition(position: Int) {
         recipeListScrollPosition = position
-        savedStateHandle.set(STATE_KEY_LIST_POSITION, position)
+        savedStateHandle[STATE_KEY_LIST_POSITION] = position
     }
 
     private fun setPage(page: Int) {
         this.page.value = page
-        savedStateHandle.set(STATE_KEY_PAGE, page)
+        savedStateHandle[STATE_KEY_PAGE] = page
     }
 
     private fun setSelectedCategory(category: FoodCategory?) {
         selectedCategory.value = category
-        savedStateHandle.set(STATE_KEY_SELECTED_CATEGORY, category)
+        savedStateHandle[STATE_KEY_SELECTED_CATEGORY] = category
     }
 
     private fun setQuery(query: String) {
         this.query.value = query
-        savedStateHandle.set(STATE_KEY_QUERY, query)
+        savedStateHandle[STATE_KEY_QUERY] = query
     }
 }

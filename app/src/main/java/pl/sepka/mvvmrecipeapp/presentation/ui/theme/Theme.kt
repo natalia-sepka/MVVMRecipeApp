@@ -3,6 +3,7 @@ package pl.sepka.mvvmrecipeapp.presentation.ui.theme
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.darkColors
@@ -11,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import pl.sepka.mvvmrecipeapp.presentation.components.CircularIndeterminateProgressBar
+import pl.sepka.mvvmrecipeapp.presentation.components.ConnectivityMonitor
 import pl.sepka.mvvmrecipeapp.presentation.components.GenericDialog
 import pl.sepka.mvvmrecipeapp.presentation.components.GenericDialogInfo
 import java.util.*
@@ -45,6 +47,7 @@ private val DarkThemeColors = darkColors(
 @Composable
 fun AppTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
+    isNetworkAvailable: Boolean,
     displayProgressBar: Boolean,
     dialogQueue: Queue<GenericDialogInfo>,
     content: @Composable () -> Unit
@@ -65,6 +68,9 @@ fun AppTheme(
                 .background(color = if (!darkTheme) Grey1 else Color.Black)
         ) {
             content()
+            Column {
+                ConnectivityMonitor(isNetworkAvailable = isNetworkAvailable)
+            }
             CircularIndeterminateProgressBar(isDisplayed = displayProgressBar, 0.3f)
 
             ProcessDialogQueue(dialogQueue = dialogQueue)
