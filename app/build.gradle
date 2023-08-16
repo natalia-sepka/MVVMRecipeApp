@@ -6,6 +6,7 @@ import dependencies.Square
 import dependencies.Coil
 import dependencies.InstrumentationTest
 import dependencies.DebugTest
+import dependencies.UnitTest
 
 plugins {
     id 'com.android.application'
@@ -13,6 +14,8 @@ plugins {
     id 'kotlin-parcelize'
     id 'kotlin-kapt'
     id 'com.google.dagger.hilt.android'
+    id 'de.mannodermaus.android-junit5'
+    id 'kotlin-android'
 }
 
 android {
@@ -101,6 +104,13 @@ dependencies {
     implementation AndroidX.room_runtime
     implementation AndroidX.room_ktx
     kapt AnnotationProcessing.room_compiler
+
+    testImplementation UnitTest.jupiter_api
+    testRuntimeOnly UnitTest.jupiter_engine
+
+    testImplementation UnitTest.mock_web_server
+
+    implementation InstrumentationTest.compose_ui
 }
 
 kapt {

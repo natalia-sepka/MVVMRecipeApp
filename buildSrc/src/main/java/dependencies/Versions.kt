@@ -11,7 +11,7 @@ object Versions {
     const val kotlin = "1.4.21-2"
     const val gradle = "7.0.0-alpha05"
     const val hilt = "2.44"
-    const val junit5 = "1.7.0.0"
+    const val junit5 = "1.9.3.0"
     const val kotlin_compiler_extension = "1.4.2"
     const val application = "7.2.2"
     const val jetbrains_kotlin_android = "1.8.10"

@@ -6,6 +6,7 @@ buildscript {
         application = Versions.application
         hilt = Versions.hilt
         jetbrains_kotlin_android = Versions.jetbrains_kotlin_android
+        junit5 = Versions.junit5
     }
 }
 plugins {
@@ -13,6 +14,7 @@ plugins {
     id 'com.android.library' version "${application}" apply false
     id 'org.jetbrains.kotlin.android' version "${jetbrains_kotlin_android}" apply false
     id 'com.google.dagger.hilt.android' version "${hilt}" apply false
+    id 'de.mannodermaus.android-junit5' version "${junit5}" apply false
 }
 
 task clean(type: Delete) {
