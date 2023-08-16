@@ -117,7 +117,7 @@ fun RecipeListScreen(
                     }
                     Row(
                         modifier = Modifier
-                            .horizontalScroll((rememberScrollState()))
+                            .horizontalScroll(rememberScrollState())
                             .fillMaxWidth()
                             .padding(start = 8.dp, bottom = 8.dp)
                     ) {

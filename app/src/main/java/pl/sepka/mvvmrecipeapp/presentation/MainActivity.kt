@@ -14,6 +14,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
+import pl.sepka.mvvmrecipeapp.datastore.SettingsDataStore
 import pl.sepka.mvvmrecipeapp.presentation.navigation.Screen
 import pl.sepka.mvvmrecipeapp.presentation.ui.recipe.RecipeDetailScreen
 import pl.sepka.mvvmrecipeapp.presentation.ui.recipeList.RecipeListScreen
@@ -22,8 +23,13 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
+
     @Inject
     lateinit var internetConnectionManager: InternetConnectionManager
+
+    @Inject
+    lateinit var settingsDataStore: SettingsDataStore
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -61,9 +67,9 @@ class MainActivity : AppCompatActivity() {
             route = Screen.RecipeList.route
         ) {
             RecipeListScreen(
-                isDarkTheme = (application as BaseApplication).isDark.value,
+                isDarkTheme = settingsDataStore.isDark.value,
                 isNetworkAvailable = internetConnectionManager.isNetworkAvailable.value,
-                onToggleTheme = { (application as BaseApplication)::toggleLightTheme },
+                onToggleTheme = { settingsDataStore.toggleTheme() },
                 onNavigateToRecipeDetailScreen = {
                     val route = Screen.RecipeDetail.route + "/${it.id}"
                     navController.navigate(route)
@@ -79,7 +85,7 @@ class MainActivity : AppCompatActivity() {
             arguments = Screen.RecipeDetail.arguments
         ) {
             RecipeDetailScreen(
-                isDarkTheme = (application as BaseApplication).isDark.value,
+                isDarkTheme = settingsDataStore.isDark.value,
                 isNetworkAvailable = internetConnectionManager.isNetworkAvailable.value,
                 recipeId = it.arguments?.getInt("recipeId"),
                 viewModel = hiltViewModel()
