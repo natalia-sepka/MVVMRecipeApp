@@ -13,13 +13,12 @@ import pl.sepka.mvvmrecipeapp.cache.AppDatabaseFake
 import pl.sepka.mvvmrecipeapp.cache.RecipeDaoFake
 import pl.sepka.mvvmrecipeapp.domain.model.Recipe
 import pl.sepka.mvvmrecipeapp.network.RecipeService
-import pl.sepka.mvvmrecipeapp.network.data.MockWebServerResponses.recipeListResponse
+import pl.sepka.mvvmrecipeapp.network.data.MockWebServerResponses
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.net.HttpURLConnection
 
-class SearchRecipesTest {
-
+class RestoreRecipesUseCaseTest {
     private lateinit var mockWebServer: MockWebServer
     private lateinit var baseUrl: HttpUrl
     private val appDatabase = AppDatabaseFake()
@@ -27,9 +26,10 @@ class SearchRecipesTest {
     private val DUMMY_QUERY = "This doesn't matter" // can be anything
 
     // system in test
-    private lateinit var searchRecipesUseCase: SearchRecipeUseCase
+    private lateinit var restoreRecipesUseCase: RestoreRecipesUseCase
 
     // dependencies
+    private lateinit var searchRecipesUseCase: SearchRecipeUseCase
     private lateinit var recipeService: RecipeService
     private lateinit var recipeDao: RecipeDaoFake
 
@@ -51,26 +51,34 @@ class SearchRecipesTest {
 
         recipeDao = RecipeDaoFake(appDatabase)
 
-        // instantiate the system in test
         searchRecipesUseCase = SearchRecipeUseCase(
             recipeDao = recipeDao,
             recipeService = recipeService
         )
+
+        // instantiate the system in test
+        restoreRecipesUseCase = RestoreRecipesUseCase(recipeDao = recipeDao)
     }
 
+    /**
+     * 1. Get some recipes from the network and insert into cache
+     * 2. Restore and show recipes are retrieved from cache
+     */
+
     @Test
-    fun getRecipesFromNetwork_emitRecipesFromCache(): Unit = runBlocking {
+    fun getRecipesFromNetwork_restoreFromCache(): Unit = runBlocking {
         // condition the response
         mockWebServer.enqueue(
             MockResponse()
                 .setResponseCode(HttpURLConnection.HTTP_OK)
-                .setBody(recipeListResponse)
+                .setBody(MockWebServerResponses.recipeListResponse)
         )
 
         // confirm the cache is empty to start
         assert(recipeDao.getAllRecipes(1, 30).isEmpty())
 
-        val flowItems = searchRecipesUseCase.invoke(
+        // get recipes from network and insert into cache
+        val searchResult = searchRecipesUseCase.invoke(
             SearchRecipeUseCase.Params(
                 1,
                 DUMMY_QUERY,
@@ -82,6 +90,15 @@ class SearchRecipesTest {
         // confirm the cache is no longer empty
         assert(recipeDao.getAllRecipes(1, 30).isNotEmpty())
 
+        // run use case
+        val flowItems = restoreRecipesUseCase.invoke(
+            RestoreRecipesUseCase.Params(
+                1,
+                DUMMY_QUERY,
+                DUMMY_TOKEN
+            )
+        ).toList()
+
         // first emission should be `loading`
         assert(flowItems[0].loading)
 
@@ -90,38 +107,7 @@ class SearchRecipesTest {
         assert((recipes?.size ?: 0) > 0)
 
         // confirm they are actually Recipe objects
-        assert(recipes?.get(index = 0) is Recipe)
-
-        // ensure loading is false now
-        assert(!flowItems[1].loading) // loading should be false now
-    }
-
-    // Simulate a bad request
-
-    @Test
-    fun getRecipeFromNetwork_emitHttpError(): Unit = runBlocking {
-        // condition the response
-        mockWebServer.enqueue(
-            MockResponse()
-                .setResponseCode(HttpURLConnection.HTTP_BAD_REQUEST)
-                .setBody("{}")
-        )
-
-        val flowItems = searchRecipesUseCase.invoke(
-            SearchRecipeUseCase.Params(
-                1,
-                DUMMY_QUERY,
-                DUMMY_TOKEN,
-                true
-            )
-        ).toList()
-
-        // first emission should be `loading`
-        assert(flowItems[0].loading)
-
-        // second emission should be the exception
-        val error = flowItems[1].error
-        assert(error != null)
+        assert(value = recipes?.get(index = 0) is Recipe)
 
         assert(!flowItems[1].loading) // loading should be false now
     }
