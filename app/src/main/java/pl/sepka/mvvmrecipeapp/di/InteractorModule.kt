@@ -9,7 +9,7 @@ import pl.sepka.mvvmrecipeapp.cache.database.AppDatabase
 import pl.sepka.mvvmrecipeapp.interactors.recipe.GetRecipeUseCase
 import pl.sepka.mvvmrecipeapp.interactors.recipe_list.RestoreRecipesUseCase
 import pl.sepka.mvvmrecipeapp.interactors.recipe_list.SearchRecipeUseCase
-import pl.sepka.mvvmrecipeapp.repository.RecipeRepository
+import pl.sepka.mvvmrecipeapp.network.RecipeService
 
 @Module
 @InstallIn(ViewModelComponent::class)
@@ -17,8 +17,8 @@ object InteractorModule {
 
     @ViewModelScoped
     @Provides
-    fun provideSearchRecipeUseCase(db: AppDatabase, recipeRepository: RecipeRepository) =
-        SearchRecipeUseCase(recipeDao = db.recipeDao(), recipeRepository = recipeRepository)
+    fun provideSearchRecipeUseCase(db: AppDatabase, recipeService: RecipeService) =
+        SearchRecipeUseCase(recipeDao = db.recipeDao(), recipeService = recipeService)
 
     @ViewModelScoped
     @Provides
@@ -26,6 +26,6 @@ object InteractorModule {
 
     @ViewModelScoped
     @Provides
-    fun provideGetRecipeUseCase(db: AppDatabase, recipeRepository: RecipeRepository) =
-        GetRecipeUseCase(recipeDao = db.recipeDao(), recipeRepository = recipeRepository)
+    fun provideGetRecipeUseCase(db: AppDatabase, recipeService: RecipeService) =
+        GetRecipeUseCase(recipeDao = db.recipeDao(), recipeService = recipeService)
 }

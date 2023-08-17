@@ -8,11 +8,11 @@ import pl.sepka.mvvmrecipeapp.domain.mapper.toDomain
 import pl.sepka.mvvmrecipeapp.domain.mapper.toRecipeEntity
 import pl.sepka.mvvmrecipeapp.domain.model.Recipe
 import pl.sepka.mvvmrecipeapp.interactors.BaseUseCase
-import pl.sepka.mvvmrecipeapp.repository.RecipeRepository
+import pl.sepka.mvvmrecipeapp.network.RecipeService
 
 class GetRecipeUseCase(
     private val recipeDao: RecipeDao,
-    private val recipeRepository: RecipeRepository
+    private val recipeService: RecipeService
 ) : BaseUseCase<GetRecipeUseCase.Params, Recipe>() {
 
     override fun action(params: Params): Flow<DataState<Recipe>> = flow {
@@ -24,8 +24,8 @@ class GetRecipeUseCase(
             emit(DataState(recipe))
         } else {
             if (params.isNetworkAvailable) {
-                val networkRecipe = recipeRepository.get(params.token, params.recipeId)
-                recipeDao.insertRecipe(networkRecipe.toRecipeEntity())
+                val recipe = recipeService.get(params.token, params.recipeId).toDomain()
+                recipeDao.insertRecipe(recipe.toRecipeEntity())
             }
 
             recipe = recipeDao.getRecipeByID(id = params.recipeId)?.toDomain()

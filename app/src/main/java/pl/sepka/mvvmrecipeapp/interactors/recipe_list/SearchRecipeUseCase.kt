@@ -8,12 +8,12 @@ import pl.sepka.mvvmrecipeapp.domain.mapper.toDomain
 import pl.sepka.mvvmrecipeapp.domain.mapper.toRecipeEntity
 import pl.sepka.mvvmrecipeapp.domain.model.Recipe
 import pl.sepka.mvvmrecipeapp.interactors.BaseUseCase
-import pl.sepka.mvvmrecipeapp.repository.RecipeRepository
+import pl.sepka.mvvmrecipeapp.network.RecipeService
 import pl.sepka.mvvmrecipeapp.util.RECIPE_PAGINATION_PAGE_SIZE
 
 class SearchRecipeUseCase(
     private val recipeDao: RecipeDao,
-    private val recipeRepository: RecipeRepository
+    private val recipeService: RecipeService
 ) : BaseUseCase<SearchRecipeUseCase.Params, List<Recipe>>() {
 
     override fun action(params: Params): Flow<DataState<List<Recipe>>> = flow {
@@ -25,11 +25,11 @@ class SearchRecipeUseCase(
         }
 
         if (params.isNetworkAvailable) {
-            val recipes = recipeRepository.search(
+            val recipes = recipeService.search(
                 token = params.token,
                 page = params.page,
                 query = params.query
-            )
+            ).recipes.map { it.toDomain() }
             // insert into the cache
             recipeDao.insertRecipes(recipes.map { it.toRecipeEntity() })
         }
