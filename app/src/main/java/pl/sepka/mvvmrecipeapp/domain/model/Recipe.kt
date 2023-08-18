@@ -6,7 +6,7 @@ import java.util.*
 
 @Parcelize
 data class Recipe(
-    val id: Int,
+    var id: Int,
     val title: String,
     val publisher: String,
     val featuredImage: String,
